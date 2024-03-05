@@ -1,80 +1,72 @@
 <script lang="ts">
-	import FilterableList from '../lib/FilterableList.svelte';
-	import { colors } from '../lib/colors.ts';
+  import { InputChip, Table, tableMapperValues } from '@skeletonlabs/skeleton';
+  import type { TableSource } from '@skeletonlabs/skeleton';
+
+  let list: string[] = ['foo', 'bar', 'fizz', 'buzz'];
+  const sourceData = [
+    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
+  ];
+
+  function setTableSource(): TableSource {
+    return {
+      head: ['Symbol', 'Name', 'weight'],
+      body: tableMapperValues(sourceData, ['symbol', 'name', 'weight']),
+      meta: tableMapperValues(sourceData, ['name', 'symbol', 'weight']),
+      foot: ['Total Elements', '', `<span class="badge variant-soft-primary">5 Elements</span>`]
+    };
+  }
+
+// If sourceData updates, set the new TableSource values
+$: tableSimple = sourceData ? setTableSource() : undefined;
+		
+				
 </script>
 
-<FilterableList
-	data={colors}
-	field="name"
-	let:item={row}
->
-	<header slot="header" class="row">
-		<span class="color" />
-		<span class="name">name</span>
-		<span class="hex">hex</span>
-		<span class="rgb">rgb</span>
-		<span class="hsl">hsl</span>
-	</header>
-
-	<div class="row">
-		<span class="color" style="background-color: {row.hex}" />
-		<span class="name">{row.name}</span>
-		<span class="hex">{row.hex}</span>
-		<span class="rgb">{row.rgb}</span>
-		<span class="hsl">{row.hsl}</span>
+<div class="container h-full mx-auto flex justify-center items-center">
+	<div class="space-y-10 text-center flex flex-col items-center">
+		<h2 class="h2">Hey, I'm Matt.</h2>
+    <InputChip 
+      bind:value={list} name="chips" placeholder="Enter filter..."
+      class="space-y-2"
+    />
+    <Table source={tableSimple} />
 	</div>
-</FilterableList>
+</div>
 
 <style lang="postcss">
-	.row {
-		display: grid;
-		align-items: center;
-		grid-template-columns: 2em 4fr 3fr;
-		gap: 1em;
-		padding: 0.1em;
-		background: var(--bg-1);
-		border-radius: 0.2em;
+	figure {
+		@apply flex relative flex-col;
 	}
-
-	header {
-		font-weight: bold;
+	figure svg,
+	.img-bg {
+		@apply w-64 h-64 md:w-80 md:h-80;
 	}
-
-	.row:not(header):hover {
-		background: var(--bg-2);
+	.img-bg {
+		@apply absolute z-[-1] rounded-full blur-[50px] transition-all;
+		animation: pulse 5s cubic-bezier(0, 0, 0, 0.5) infinite,
+			glow 5s linear infinite;
 	}
-
-	.row:hover {
-		background: var(--bg-2);
-	}
-
-	.color {
-		aspect-ratio: 1;
-		height: 100%;
-		border-radius: 0.1em;
-	}
-
-	.rgb, .hsl {
-		display: none;
-	}
-
-	@media (min-width: 40rem) {
-		.row {
-			grid-template-columns: 2em 4fr 3fr 3fr;
+	@keyframes glow {
+		0% {
+			@apply bg-primary-400/50;
 		}
-
-		.rgb {
-			display: block;
+		33% {
+			@apply bg-secondary-400/50;
+		}
+		66% {
+			@apply bg-tertiary-400/50;
+		}
+		100% {
+			@apply bg-primary-400/50;
 		}
 	}
-
-	@media (min-width: 60rem) {
-		.row {
-			grid-template-columns: 2em 4fr 3fr 3fr 3fr;
-		}
-
-		.hsl {
-			display: block;
+	@keyframes pulse {
+		50% {
+			transform: scale(1.5);
 		}
 	}
 </style>
