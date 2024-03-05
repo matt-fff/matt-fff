@@ -1,11 +1,7 @@
-<script>
+<script lang="ts">
 	import FilterableList from '../lib/FilterableList.svelte';
 	import { colors } from '../lib/colors.ts';
 </script>
-
-<h1 class="text-3xl font-bold underline">
-  Hello world!
-</h1>
 
 <FilterableList
 	data={colors}
