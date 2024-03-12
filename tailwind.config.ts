@@ -10,7 +10,7 @@ export default {
     "./src/**/*.{html,js,svelte,ts}",
     join(
       require.resolve("@skeletonlabs/skeleton"),
-      "../**/*.{html,js,svelte,ts}",
+      "../**/*.{html,js,svelte,ts}"
     ),
   ],
   theme: {
@@ -24,10 +24,6 @@ export default {
         preset: [
           {
             name: "skeleton",
-            enhancements: true,
-          },
-          {
-            name: "crimson",
             enhancements: true,
           },
         ],
